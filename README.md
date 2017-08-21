@@ -1,0 +1,2 @@
+# X-ORGIN
+XOrigin is a pipeline to estimate expansion origins from derived SNPs, which incorporate temporal and spatial heterogeneity. It is best suited for estimating refugia for species that experienced distributional shifts during last glacial maximum. The pipeline is dependent on SPLATCHE2 for spatially-explicit demographic simulations, and make use of the spatial statistics Psi to estimate expansion origins.
