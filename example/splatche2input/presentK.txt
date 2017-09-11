@@ -1,0 +1,2 @@
+0	K	barrier
+1	K	habitable

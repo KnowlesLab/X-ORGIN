@@ -1,0 +1,16 @@
+//Inputfile for the program ABCsampler
+//-----------------------------------------------------------------------
+samplerType standard 
+//-----------------------------------------------------------------------
+estName toy.est
+obsName ./calSumStat/empiricalSS.obs
+outName toy_output
+separateOutputFiles 0
+nbSims 25000
+writeHeader 1
+simulationProgram ./splatche2input/splatche2-01_lin_64
+simInputName ./splatche2input/1-settings.txt#./splatche2input/2-dens_init.txt#./splatche2input/pastK.txt#./splatche2input/presentK.txt
+simParam SIMINPUTNAME
+sumStatProgram /usr/bin/python
+sumStatParam calSumStat/calSumStat.py#splatche2input#5-Arrival_cell_output.txt#1-settings-temp_6-GenSamples_1.arp#6-GenSamples.sam#calSumStat
+ 

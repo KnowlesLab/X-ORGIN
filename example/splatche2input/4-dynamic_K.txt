@@ -1,0 +1,3 @@
+2	
+1	./splatche2input/pastK-temp.txt past
+250	./splatche2input/presentK-temp.txt current

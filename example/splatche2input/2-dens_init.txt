@@ -1,0 +1,2 @@
+1
+ori	N_ANCESTRAL	oriLat	oriLon	0	0	0	0	0	0						

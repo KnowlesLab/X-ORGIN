@@ -1,0 +1,17 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name	#dist.#min	#max	
+//all N are in number of diploid individuals
+0 MRATE unif 0.001 0.01
+1 N_ANCESTRAL unif 1000	10000
+1 K unif 1000 10000
+1 oriLat	unif	1	25
+1 oriLon	unif	1	21
+
+
+[RULES]
+N_ANCESTRAL > 30/MRATE
+
+[COMPLEX PARAMETERS]
