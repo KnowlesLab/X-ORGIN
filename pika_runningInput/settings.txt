@@ -1,0 +1,140 @@
+#List of parameters for SPLATCHE2
+#################################
+
+
+##################################################################
+#Parameters linked to filenames
+##################################################################
+
+#Text file with the locations, initial densities, etc of the initial population(s) (MANDATORY)
+PopDensityFile=./dens_init-temp.txt
+
+#Ascii file describing the initial world (MANDATORY)
+PresVegetationFile=./oriworld.asc
+
+#Text file holding the carying capacity values for each vegetation category (MANDATORY)
+Veg2KFile=./dynamic_K.txt
+
+##################################################################
+#Parameters linked to demographic simulations
+##################################################################
+
+#Identificator for the demographic model  (MANDATORY)
+ChosenDemographicModel=3
+
+#Number of generations (MANDATORY)
+EndTime=2100
+
+#Generation time, used in several functions needing this (MANDATORY)
+GenerationTime=10
+
+#Growth rate used in the logistic function (MANDATORY)
+GrowthRate=0.5
+
+#Migration rate for neighboring deme migration (MANDATORY)
+MigrationRate= MRATE
+#MigrationRate= 0.06
+
+#If this parameter is set to 0, then if the initial population size (N) is
+#greater than the carrying capacity (K) of the source population, the remaining
+#N-K individuals are spread around the neighboring demes (without ever
+#exceeding the carrying capacities of these demes) until N individuals are placed.
+#The "overflow" of individuals allows one to start with a "patch" of source
+#populations, rather than a single source deme. If this parameter is set to 1,
+#all individuals are found in the original deme (even if N >>K), but in this
+#case the population of the source deme can be quickly downward regulated by
+#the logistic function.
+AllowSourcePopulationOverflow=0
+
+#Tau value (in generations). backward in time, this is the time between the onset of the expansion
+#and the timing at which all remainaing lineages are brought into one small deme  (NOT MANDATORY)
+TauValue=840
+
+#Ancestral population size. Size of the ancestral population at tau  (NOT MANDATORY)
+AncestralSize= N_ANCESTRAL
+#AncestralSize=100000
+
+#Text file (*.col) where are found the deme coordinates for which arrival times are needed (MANDATORY)
+ArrivalCellFile=./Arrival_cell.col
+
+
+##################################################################
+#Parameters linked to physical environment
+##################################################################
+
+#Choice of friction type (0:vegetation,1:roughness topography,2:both)
+#If friction needs to be taken into account, this parameter must be defined
+#(along with "Veg2FFile" and/or "RoughnessTopoFile").
+#If not defined, friction is uniform   (NOT MANDATORY)
+#FrictionChoice=1
+
+#Real time (in years BP) for the start of the simulation. It must be negative!
+#This parameter is linked to the graphical display of the real time in any simulation,
+#but is also linked to the Vostok time series in a dynamic simulation (MANDATORY)
+RealBPTime=-21000
+
+
+##################################################################
+#Parameters linked to genetic simulations
+##################################################################
+
+#Text file containing the coordinates and sizes (+other info) of the genetic samples
+#It must have a "*.sam" extension (MANDATORY)
+SampleFile=./GenSamples.sam 
+
+#Text file (*.par) containing the definition of markers property (+recombination) (MANDATORY)
+GeneticFile=./genetic_data_SEQ.par
+
+#Number of genetic simulations for each demographic one (MANDATORY)
+NumGeneticSimulations=1
+
+#Choice of genotypic or haplotypic data (1:genotypic; 0: haplotypic)(MANDATORY)
+GenotypicData=1
+
+#Maximum number of total generations for a simulation. This number corresponds to
+#the number of generation for the demographic simulation + the extra generations
+#for the coalescence process prior to time 0 (MANDATORY)
+MaxNumGenerations=1400000
+
+#Generation of Nexus files (0:no ; 1: yes) (NOT MANDATORY)
+NexusFile=0
+
+#Generation of genealogy files (0:no ; 1: yes) (MANDATORY)
+GenealogiesFile=0
+
+#Generation of immigrants distribution file (0:no ; 1: yes) (MANDATORY)
+ImmigDistrFile=0
+
+##################################################################
+#Parameters linked to various other outputs
+##################################################################
+
+#Generate output BMP of migrations (0:no ; 1: yes) (MANDATORY)
+GenerateOutputMigrationBMP=0
+
+#Generate output BMP of densities (0:no ; 1: yes) (MANDATORY)
+GenerateOutputMDensityBMP=0
+
+#Generate output BMP of occupations (0:no ; 1: yes) (MANDATORY)
+GenerateOutputOccupationBMP=0
+
+#Generate output ASCII of migrations (0:no ; 1: yes) (MANDATORY)
+GenerateOutputMigrationASCII=0
+
+#Generate output ASCII of densities (0:no ; 1: yes) (MANDATORY)
+GenerateOutputMDensityASCII=0
+
+#Generate output ASCII of occupations (0:no ; 1: yes) (MANDATORY)
+GenerateOutputOccupationASCII=0
+
+
+##################################################################
+# Miscelaneous Parameters
+##################################################################
+
+#Allow "short int" (instead of int) to be used for the database. This reduce by half
+#the amount of RAM necessary. Only do that if you are sure that your number of individuals
+#(i.e. population densities and number of migrants) never exceeds 16'000 ! (NOT MANDATORY)
+AllowShortIntForNumberOfIndividuals=0
+
+DoublePopulationMode=0

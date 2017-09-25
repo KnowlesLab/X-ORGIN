@@ -1,0 +1,16 @@
+//inputfile for the program ABCestimator
+estimationType standard 
+simName PCACo_allToy_cleaned.txt
+obsName PodsSS_allToy_cleaned.txt //5000 simulation case of SS observation
+trueParamName PodsParam_allToy_cleaned.txt //the parameter sets of 5000 simulations
+maxReadSims 1000000
+params 1-3
+//rejection
+numRetained 10000
+//parameters for posterior estimation
+diracPeakWidth 0.04
+obsPValue 100
+outputPrefix toyPodsEval
+posteriorDensityPoints 200
+stadardizeStats 0
+writeRetained 1

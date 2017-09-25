@@ -1,0 +1,2 @@
+1
+South_North	NS_ANC	oriLat	oriLon	0	0	0	0	0	0						

@@ -1,0 +1,19 @@
+//Inputfile for the program ABCsampler
+//-----------------------------------------------------------------------
+samplerType standard 
+//-----------------------------------------------------------------------
+estName pika.est
+obsName ObservedSumstats.obs;psiout_temprun.snapp.txt
+outName pika_output
+separateOutputFiles 0
+nbSims 25000
+writeHeader 1
+simulationProgram splatche2-01_lin_64
+simInputName settings.txt#./dens_init.txt#./veg2K_cur.txt#./veg2K_int.txt#./veg2K_LGM.txt
+simParam SIMINPUTNAME
+launchBeforeSS /usr/bin/python
+launchBeforeSSParam arp2snapp.py#GeneticsOutput/settings-temp_GenSamples_1.arp
+simDataName settings-temp_GenSamples_1.arp;settings-temp_GenSamples_1.arp
+sumStatProgram arlsumstat;/usr/cac/rhel6/R/3.2.2/bin/Rscript
+sumStatParam GeneticsOutput/settings-temp_GenSamples_1.arp#SSFILENAME#0#1;calPsi.r#temprun.snapp#temprun_loc.txt
+ 

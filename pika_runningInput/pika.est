@@ -1,0 +1,41 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name	#dist.#min	#max	
+//all N are in number of diploid individuals
+//Nanc = 114000, all other values are in relative ranges of Nanc
+0 LOG_MIGRATION unif -3.6 -2
+0 ANC_RANGE unif 0.816270526	11.2494578
+0 LOG_CAPACITY unif 3.3 4.6
+0 oriLat	unif	1073892.9	1850478.5
+0 oriLon	unif	616487.0	899496.1
+
+
+[RULES]
+LOG_CAPACITY > (1-LOG_MIGRATION)
+
+[COMPLEX PARAMETERS]
+1 N_ANCESTRAL = 45186
+1 CAPACITY = pow10(LOG_CAPACITY)
+0 MRATE = pow10(LOG_MIGRATION)
+1 NS_ANC = N_ANCESTRAL*ANC_RANGE
+1 k_1 = 0
+1 k_1-5 = CAPACITY/9*0.5
+1 k_2 = CAPACITY/9*1
+1 k_2-5 = CAPACITY/9*1.5
+1 k_3 = CAPACITY/9*2
+1 k_3-5 = CAPACITY/9*2.5
+1 k_4 = CAPACITY/9*3
+1 k_4-5 = CAPACITY/9*3.5
+1 k_5 = CAPACITY/9*4
+1 k_5-5 = CAPACITY/9*4.5
+1 k_6 = CAPACITY/9*5
+1 k_6-5 = CAPACITY/9*5.5
+1 k_7 = CAPACITY/9*6
+1 k_7-5 = CAPACITY/9*6.5
+1 k_8 = CAPACITY/9*7
+1 k_8-5 = CAPACITY/9*7.5
+1 k_9 = CAPACITY/9*8
+1 k_9-5 = CAPACITY/9*8.5
+1 k_10 = CAPACITY

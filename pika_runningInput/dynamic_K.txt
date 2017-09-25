@@ -1,0 +1,4 @@
+3	
+1	./veg2K_LGM-temp.txt LGM1
+500	 ./veg2K_int-temp.txt LGM2
+1100	./veg2K_cur-temp.txt current

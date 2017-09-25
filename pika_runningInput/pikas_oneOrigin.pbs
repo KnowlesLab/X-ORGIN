@@ -1,0 +1,39 @@
+
+#!/bin/bash
+#PBS -N pika_oneOrigin_revised
+#PBS -M heqixin@umich.edu 
+#PBS -m abe
+
+#PBS -l procs=1,pmem=4gb,walltime=14:00:00:00
+#PBS -j oe
+#PBS -V
+
+#PBS -A knowlesl_flux
+#PBS -l qos=flux
+#PBS -q flux
+#PBS -t 1-60
+
+####  End PBS preamble
+#  Include the next three lines always
+if [ "x${PBS_NODEFILE}" != "x" ] ; then
+   cat $PBS_NODEFILE   # contains a list of the CPUs you were using if run with PBS
+fi
+
+model='oneOrigin_revised'
+
+module load R/3.2.2
+
+##create a unique folder and store folders
+scratchFolder="/scratch/lsa_flux/heqixin/ABC/$model.${PBS_ARRAYID}"
+mkdir $scratchFolder
+cpfromfolder="/home/heqixin/ABC/$model"
+
+#copy files
+cp -r $cpfromfolder/* $scratchFolder/
+##go on the node and launch ABCsampler
+cd $scratchFolder
+
+chmod +x ABCsampler splatche2-01_lin_64 arlsumstat 
+
+./ABCsampler pikasim_linux.input addToSeed=${PBS_ARRAYID}
+
