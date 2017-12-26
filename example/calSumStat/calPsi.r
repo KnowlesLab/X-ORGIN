@@ -5,7 +5,7 @@ coords_file <- args[2] #replaced by cmdline arg 2
 #regions_to_analyze <- list("REGION_1")
 psi_name<-args[3]
 ploidy <- 2  #set ploidy of individuals. 1=haploid, 2 =diploid
-subSample <- 0 #Value of number of individual subsample down to, if no subsample is required, put 0
+subSample <- 2 #Value of number of individual subsample down to, if no subsample is required, put 0
 outgroup_columns <- NULL 
 nsnp <- NULL
 out_file_id = sprintf( "out_%s", basename( snp_file ) )
