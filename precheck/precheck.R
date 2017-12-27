@@ -9,7 +9,7 @@ regions_to_analyze <- list("REGION_1")
 psi_name<-args[3]
 ploidy <- 2  #set ploidy of individuals. 1=haploid, 2 =diploid
 #Value of number of individual subsample down to, if no subsample is required, put 0
-subSample <- 0 
+subSample <- 2 
 outgroup_columns <- NULL 
 nsnp <- NULL
 

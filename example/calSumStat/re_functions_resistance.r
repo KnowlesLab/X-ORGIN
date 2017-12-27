@@ -332,7 +332,9 @@ get_psi <- function (ni, nj, fi, fj,
         tbl <- tbl[! to.exclude, ] 				      
         poly_mat <- matrix(0,nrow=n+1, ncol=n+1)
         poly_mat[2:(n+1),2:(n+1)] <- 1
-        poly_mat[n+1,n+1] <- 0
+        ##I don't think this line of putting poly_mat[n+1,n+1]<-0 is correct
+        #because f22 should be in the devisor as it's freq of derived snp being fixed in both pops.
+        #poly_mat[n+1,n+1] <- 0
 
         #psi_mat is the contribution to psi for each entry
         psi_mat <- outer(0:n,0:n,FUN=function(x,y)(y-x))

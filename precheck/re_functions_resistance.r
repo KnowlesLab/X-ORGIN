@@ -332,7 +332,9 @@ get_psi <- function (ni, nj, fi, fj,
         tbl <- tbl[! to.exclude, ] 				      
         poly_mat <- matrix(0,nrow=n+1, ncol=n+1)
         poly_mat[2:(n+1),2:(n+1)] <- 1
-        poly_mat[n+1,n+1] <- 0
+        ##I don't think this line of putting poly_mat[n+1,n+1]<-0 is correct
+        #because f22 should be in the devisor as it's freq of derived snp being fixed in both pops.
+        #poly_mat[n+1,n+1] <- 0
 
         #psi_mat is the contribution to psi for each entry
         psi_mat <- outer(0:n,0:n,FUN=function(x,y)(y-x))
@@ -392,15 +394,13 @@ make_pops_snapp <- function( coords, n=2 ){
         #this function returns all locations (in lat, long) that have more than
         #cutoff samples. I'll use these as locations for analysis
         #the return is the id (i.e. col in data, row in coords) of the populations
-        
-        pop_list = list()
-        pop1 <- unlist(lapply(coords[,2],function(x)which(x==unique(coords[,2]))))
-        pop2 <- unlist(lapply(coords[,3],function(x)which(x==unique(coords[,3]))))
-        pop <- 10000*pop1 + pop2
+        ###changed by hqx, maintain the order of input population order###
 
-        ids_to_keep <- as.numeric(names(table(pop))[table(pop)>=cutoff])
-        for(i in 1:length(ids_to_keep)){
-            pop_list[[i]] <- which(pop==ids_to_keep[i])
+        pop_list = list()
+        popUnique<-unique(coords[,2:3])
+        popUnique<-popUnique[(apply(popUnique,1,function(x) sum((coords[,2]==x[1])*(coords[,3]==x[2]))))>cutoff,]
+        for(i in 1:nrow(popUnique)){
+            pop_list[[i]] <- which((coords[,2]==popUnique[i,1])&(coords[,3]==popUnique[i,2]))
         }
 
         return(pop_list)
