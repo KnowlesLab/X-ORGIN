@@ -11,6 +11,8 @@ usage = "usage: %prog [options] arg"
 parser = OptionParser(usage=usage)
 parser.add_option("-a",dest="lgmFileName",default = "21k_class.asc", help="name of the lgm suitability (integer bins) map file")
 parser.add_option("-c",dest="curFileName",default = "current_class.asc", help="name of the current suitability (integer bins) map file")
+parser.add_option("-g",dest="gui",action="store_true",default = False, help="name of the current suitability (integer bins) map file")
+parser.add_option("-K",dest="maxK",default = 1000.0, type="float",help="maximum K value")
 (options,args) = parser.parse_args()
 
 LGMWorld=np.loadtxt(options.lgmFileName,float,skiprows=6)
@@ -61,13 +63,18 @@ for x in uniqueList:
 	#print x
 	uniqueDict[x]=FinalID
 	(lgm,current)=x.split("_")
-	vegcur.write("%d\tk_%s\t%d\n"%(FinalID,current,FinalID))
-	veglgm.write("%d\tk_%s\t%d\n"%(FinalID,lgm,FinalID))
-	intv = (float(lgm) + float(current))/2
-	if intv-int(intv) == 0.5:
-		vegint.write("%d\tk_%d-5\t%d\n"%(FinalID,int(intv),FinalID))
+	if options.gui:
+		vegcur.write("%d\t%d\t%d\n"%(FinalID,round(float(current)/10.0*options.maxK),FinalID))
+		veglgm.write("%d\t%d\t%d\n"%(FinalID,round(float(lgm)/10.0*options.maxK),FinalID))
+		vegint.write("%d\t%d\t%d\n"%(FinalID,round((float(lgm)+float(current))/20.0*options.maxK),FinalID))
 	else:
-		vegint.write("%d\tk_%d\t%d\n"%(FinalID,int(intv),FinalID))
+		vegcur.write("%d\tk_%s\t%d\n"%(FinalID,current,FinalID))
+		veglgm.write("%d\tk_%s\t%d\n"%(FinalID,lgm,FinalID))
+		intv = (float(lgm) + float(current))/2
+		if intv-int(intv) == 0.5:
+			vegint.write("%d\tk_%d-5\t%d\n"%(FinalID,int(intv),FinalID))
+		else:
+			vegint.write("%d\tk_%d\t%d\n"%(FinalID,int(intv),FinalID))
 
 	FinalID+=1
 
