@@ -9,7 +9,7 @@ def runArlsumstat(arlSumStat, input):
 	p.communicate()
 
 def Arp2snapp(f):
-	infile = file(f)
+	infile = open(f,'r')
 	outfile1 = open("temprun.snapp","w")
 	outfile2 = open("temprun_loc.txt","w")
 
@@ -69,28 +69,32 @@ arrivalCol = wkDir+ "/" + splatcheRunningFolder + "/" + sys.argv[2]
 arpFile = wkDir+ "/" + splatcheRunningFolder + "/GeneticsOutput/" + sys.argv[3]
 map = wkDir+ "/" + splatcheRunningFolder + "/" + sys.argv[4]
 calSSFolder = sys.argv[5]
+arlSumStats_program = sys.argv[6]
+empiral_SS = wkDir + "/" + sys.argv[7]
+	
 
 mapInfo = np.genfromtxt(map,dtype='float',skip_header = 1,usecols = (3,4))
-arrivalTime = [int(x.split(" : ")[1]) for x in file(arrivalCol).readlines()[1:]]
+arrivalTime = [int(x.split(" : ")[1]) for x in open(arrivalCol,'r').readlines()[1:]]
 
 #run python in the calSS folder
 #print os.getcwd()
 os.chdir(calSSFolder)
 
 
-out = open("../summary_stats_temp.txt","w")
+out = open(wkDir + "/summary_stats_temp.txt","w")
 
 if sum(n<0 for n in arrivalTime)>0:
 	##write sumstat with NAs
-	head=file("empiricalSS.obs").readline().split()
+	headF = open(empiral_SS,'r')
+	head=headF.readline().split()
 	out.write("\t".join(head)+"\n-9999"+"\t-9999"*(len(head)-1)+"\n")
 	out.close()
 else:
-	runArlsumstat("arlsumstat", arpFile)
+	runArlsumstat(arlSumStats_program, arpFile)
 	Arp2snapp(arpFile)
-	out1=file("out1.txt").readlines()
+	out1=open("out1.txt",'r').readlines()
 	runPsi()
-	out2=file("out2.txt").readlines()
+	out2=open("out2.txt",'r').readlines()
 	out.write("%s\t%s\n%s\t%s\n"%(out1[0][:-1],out2[0][:-1],out1[1][:-1],out2[1][:-1]))
 	out.close()
 	

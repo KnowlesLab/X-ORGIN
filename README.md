@@ -1,9 +1,11 @@
 # X-ORGIN
 XOrigin is a pipeline designed for estimating expansion origins from derived SNPs, which incorporates temporal and spatial heterogeneities. It is best suited for estimating refugia for species that experienced distributional shifts during last glacial maximum. The pipeline is dependent on SPLATCHE2 for spatially-explicit demographic simulations, and makes use of the spatial statistics Psi to estimate expansion origins.
 
+If you have any questions, please email: heqixin@purdue.edu
+
 To cite, please include the following papers:
 
-Qixin He, Joyce Padro, L. Lacey Knowles. (2017 in press) Inferring the geographic origin of a range expansion: latitudinal and longitudinal coordinates inferred from genomic data in an ABC framework with the program X-ORIGIN. Mol. Ecol.
+Qixin He, Joyce Padro, L. Lacey Knowles. (2017) Inferring the geographic origin of a range expansion: latitudinal and longitudinal coordinates inferred from genomic data in an ABC framework with the program X-ORIGIN. Mol. Ecol.
 
 Peter, Benjamin M., and Montgomery Slatkin. “Detecting Range Expansions from Genetic Data.” Evolution 67, no. 11 (November 1, 2013): 3274–89. doi:10.1111/evo.12202.
 
