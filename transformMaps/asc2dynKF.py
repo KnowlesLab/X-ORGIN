@@ -1,6 +1,6 @@
 #!/usr/bin/python
 '''
-This script make an initial world, and generate dynamic conversion table for carrying capacities
+This script makes an initial world, and generates dynamic conversion table for carrying capacities
 based on ancestral and current asc files.
 Qixin He
 '''
@@ -9,80 +9,87 @@ from optparse import OptionParser
 
 usage = "usage: %prog [options] arg"
 parser = OptionParser(usage=usage)
-parser.add_option("-a",dest="lgmFileName",default = "21k_class.asc", help="name of the lgm suitability (integer bins) map file")
-parser.add_option("-c",dest="curFileName",default = "current_class.asc", help="name of the current suitability (integer bins) map file")
-parser.add_option("-g",dest="gui",action="store_true",default = False, help="name of the current suitability (integer bins) map file")
-parser.add_option("-K",dest="maxK",default = 1000.0, type="float",help="maximum K value")
+parser.add_option("-l",dest="layers",default = "21k_class.asc,mid_class.asc, current_class.asc", help="list of suitability (integer bins) map files to be used in the simulation, separated by comma")
+parser.add_option("-n",dest="totalCat",default = 10,type = "int", help="number of categories of carry capacity, default is 10 (K_0 to K_10) ")
+parser.add_option("-g",dest="gui",action="store_true",default = False, help="whether to generate files with actual carrying capacities (instead of parameters) for gui testing or if K is not varied in the simulation")
+parser.add_option("-K",dest="maxK",default = 1000.0, type="float",help="max K value used if generating the actual files when -g is set to True")
 (options,args) = parser.parse_args()
 
-LGMWorld=np.loadtxt(options.lgmFileName,float,skiprows=6)
-#print LGMWorld[0,100:105]
-numEle = np.sum(LGMWorld!=-9999)
-print "suitable cell number in LGM is ",numEle
-dynamicKF = np.zeros((numEle,6),float)
-#column name is:
-#0	      1	     2	      3	     4	          5              
-#FinalID rowNum columnNum LGM intermediate Current
-curWorld=np.loadtxt(options.curFileName,float,skiprows=6)
-maxSuit = max(np.max(LGMWorld),np.max(curWorld))
-#print np.max(LGMWorld)
-LGM = file(options.lgmFileName)
-row=1
-header=''
-for line in LGM:
-	if row <7:
-		header+=line
-	else:
-		break
-	row+=1
-LGM.close()			
-oriworld = np.zeros(np.shape(LGMWorld),int)
-IdCount = 0
-findingList = ['']*numEle
-for index, x in np.ndenumerate(LGMWorld):
-	if x == -9999:
-		oriworld[index] = -9999
-	else:
-		if curWorld[index]==-9999:
-			curWorld[index]=0
-		xr = int(round(x/maxSuit*10))
-		intr = int(round(np.mean([x,curWorld[index]])/maxSuit*10))
-		cr = int(round(curWorld[index]/maxSuit*10))
-		dynamicKF[IdCount] = [-1,index[0],index[1],xr,intr,cr]
-		findingList[IdCount] = "%d_%d"%(xr,cr)
-		IdCount+=1
-uniqueList=set(findingList)
-print "number of unique classes is ", len(uniqueList)
-uniqueDict={}
-FinalID=1
-
-vegcur = open("veg2K_cur.txt","w")
-vegint = open("veg2K_int.txt","w")
-veglgm = open("veg2K_lgm.txt","w")
-for x in uniqueList:
-	#print x
-	uniqueDict[x]=FinalID
-	(lgm,current)=x.split("_")
-	if options.gui:
-		vegcur.write("%d\t%d\t%d\n"%(FinalID,round(float(current)/10.0*options.maxK),FinalID))
-		veglgm.write("%d\t%d\t%d\n"%(FinalID,round(float(lgm)/10.0*options.maxK),FinalID))
-		vegint.write("%d\t%d\t%d\n"%(FinalID,round((float(lgm)+float(current))/20.0*options.maxK),FinalID))
-	else:
-		vegcur.write("%d\tk_%s\t%d\n"%(FinalID,current,FinalID))
-		veglgm.write("%d\tk_%s\t%d\n"%(FinalID,lgm,FinalID))
-		intv = (float(lgm) + float(current))/2
-		if intv-int(intv) == 0.5:
-			vegint.write("%d\tk_%d-5\t%d\n"%(FinalID,int(intv),FinalID))
-		else:
-			vegint.write("%d\tk_%d\t%d\n"%(FinalID,int(intv),FinalID))
-
-	FinalID+=1
-
-for x in range(len(dynamicKF)):
-	oriworld[int(dynamicKF[x,1]),int(dynamicKF[x,2])] = uniqueDict[findingList[x]]
-
-oriworldf=open("oriworld.asc","w")
-oriworldf.write(header)
-for line in oriworld:
-	oriworldf.write(" ".join([str(x) for x in line]) + "\n")
-oriworldf.close()
+if __name__ == '__main__':
+	mapList = options.layers.split(",")
+	print(mapList)
+	#load in all the maps
+	mapMatrix = []
+	maxSuit = 0.0
+	options.totalCat = float(options.totalCat)
+	for m in mapList:
+		temp = np.loadtxt(m,float,skiprows=6)
+		temp[temp==-9999]=0
+		maxSuit = max(maxSuit, np.max(temp))
+		mapMatrix.append(temp)
+	numEle = temp.size
+	
+	#read in header
+	with open(m) as myfile:
+		head = [next(myfile) for x in range(6)]
+	print(head)
+	
+	#read in suitability combinations
+	dynamicKF = np.zeros((numEle,2+len(mapList)),float)
+	#print(dynamicKF[0:2,:])
+	#column name is:
+	#0	      1	     2	      3	     4	    ...          
+	#rowNum columnNum layer1 layer2  layer3 ...
+	oriworld = np.zeros(np.shape(mapMatrix[0]),int)-9999
+	IdCount = 0
+	findingList = ['']*numEle
+	for index, x in np.ndenumerate(mapMatrix[0]):
+		tempId = np.array([index[0],index[1],round(x/maxSuit*options.totalCat)])
+		for i in range(1,len(mapList)):
+			#print(i)
+			tempId = np.append(tempId, round(mapMatrix[i][index]/maxSuit*options.totalCat))
+		#print(tempId)
+		if np.any(tempId[2:]>0):
+			dynamicKF[IdCount] = tempId
+			findingList[IdCount] = "_".join([str(y) for y in tempId[2:]])
+			IdCount+=1
+	
+	dynamicKF = dynamicKF[0:IdCount]
+	findingList = findingList[0:IdCount]	
+	uniqueList=set(findingList)
+	print("number of unique classes is ", len(uniqueList))
+	
+	uniqueDict={}
+	FinalID=1
+	outFile = []
+	for m in mapList:
+		outFile.append(open("veg2K_"+m.split(".")[0]+".txt","w"))
+	
+	for comb in uniqueList:
+		#print(comb)
+		uniqueDict[comb]=FinalID
+		xList=[int(float(x)) for x in comb.split("_")]
+		#print(xList)
+		for i in range(len(xList)):
+			if options.gui:
+				outFile[i].write("%d\t%d\t%d\n"%(FinalID,round(float(xList[i])/options.totalCat*options.maxK),FinalID))
+			else:
+				outFile[i].write("%d\tk_%d\t%d\n"%(FinalID,xList[i],FinalID))
+		FinalID+=1
+	
+	for f in outFile:
+		f.close()
+	
+	for x in range(len(dynamicKF)):
+		oriworld[int(dynamicKF[x,0]),int(dynamicKF[x,1])] = uniqueDict[findingList[x]]
+	
+	oriworldf=open("oriworld.asc","w")
+	oriworldf.write(''.join(head))
+	for line in oriworld:
+		oriworldf.write(" ".join([str(x) for x in line]) + "\n")
+	oriworldf.close()
+	
+	
+	
+	
+	
